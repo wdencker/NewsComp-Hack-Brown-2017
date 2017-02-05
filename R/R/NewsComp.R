@@ -90,11 +90,12 @@ getResults <- function(url) {
     body <- analyzeURL(url)
     keywords <- gsub(" ", "+", names(keywords(body, top_n = 10, api_key = '961434b69d19c04216d8c9064d954de2', version = 2)))
     simple.url <- gsub(".*(www.*com).*", "\\1", url)
-  	sites <- c("www.nytimes.com", "www.cnn.com", "www.foxnews.com", "www.breitbart.com", "www.politico.com", "www.washingtonpost.com")
-  	sites <- sites[!grepl(simple.url, sites)]
-  	old.fvector <- sapply(text_features(body, api_key = '961434b69d19c04216d8c9064d954de2'), function(x) x)
-  	matrix <- sapply(sites, function(x) getBestMatch(x, old.fvector, keywords))
-   sapply(1:6, function(x) createVector(sites, x, matrix, body, simple.url))
+    sites <- c("www.nytimes.com", "www.cnn.com", "www.foxnews.com", "www.breitbart.com", "www.politico.com", "www.washingtonpost.com")
+    sites <- sites[!grepl(simple.url, sites)]
+    old.fvector <- sapply(text_features(body, api_key = '961434b69d19c04216d8c9064d954de2'), function(x) x)
+    matrix <- sapply(sites, function(x) getBestMatch(x, old.fvector, keywords))
+    v <- sapply(1:6, function(x) createVector(sites, x, matrix, body, simple.url))
+    unlist(v, recursive = TRUE, use.names = TRUE)
 }
 
 
