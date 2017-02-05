@@ -1,0 +1,223 @@
+body {
+  font-family: 'Raleway', sans-serif;
+  font-weight: normal;
+  background: lightblue;
+  font-size: 100%;
+}
+
+#container {
+  width: 750px;
+}
+
+#heading {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#heading h2 {
+  color: black;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}
+.row {
+  background: white;
+  margin-bottom: 6px;
+  height: 65px;
+  outline: black solid 1px;
+}
+.news-container {
+  display: inline-block;
+  height: 65px;
+  width: 160px;
+}
+
+.link-container {
+  display: inline-block;
+  width: 90px;
+  margin-left: 30px;
+  text-align: center;
+  top: 50%;
+  transform: translateY(-110%);
+}
+
+.graph {
+  display: inline-block;
+  height: 60px;
+  width: 200px;
+  position: relative;
+  top: 40%;
+  transform: translateY(-50%);
+  margin-left: 20px;
+}
+
+/*.row > p {
+  display: inline-block;
+  position: relative;
+  transform: translateY(-110%);
+  margin: 0;
+  padding: 0;
+}*/
+
+.news-icon {
+  max-height: 60px;
+  max-width: 150px;
+  /*position: relative;
+  margin: 0;
+  top: 50%;
+  transform: translateY(-50%);*/
+  padding-left: 10px;
+}
+
+
+/* From http://www.w3schools.com/howto/howto_css_loader.asp */
+.loader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 2s linear infinite;
+  margin-left: 20px;
+  margin-bottom: 30px;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+/* Derived from https://codepen.io/rgfx/pen/gpEzVv */
+.stacked-bar-graph {
+  width: 200px;
+  height: 30px;
+  text-align: center;
+}
+
+.stacked-bar-graph > span {
+  display: inline-block;
+  height:100%;
+  box-sizing: border-box;
+  float: left;
+  color: #fff;
+  font-weight: bold;
+  font-family: arial, sans-serif;
+}
+
+.bar-liberal {
+  background: #004fce;
+}
+
+.bar-green {
+  background: #22cc30;
+}
+
+.bar-libertarian {
+  background: #eae609;
+}
+
+.bar-conservative {
+  background: #e50404;
+}
+
+.bar-anger {
+  background: #af1616;
+}
+
+.bar-fear {
+  background: #51250c;
+}
+
+.bar-joy {
+  background: #a120cc;
+}
+
+.bar-sadness {
+  background: #111e75;
+}
+
+.bar-surprise {
+  background: #4bcc20;
+}
+
+/* Derived from https://stackoverflow.com/questions/7117073/how-to-add-a-tooltip-to-a-div */
+
+[tooltip]:before {
+  /* needed - do not touch */
+  content: attr(tooltip);
+  position: absolute;
+  opacity: 0;
+  
+  /* customizable */
+  transition: all 0.15s ease;
+  padding: 10px;
+  color: black;
+  border-radius: 10px;
+  box-shadow: 2px 2px 1px silver;
+  font-size: 10px;
+  width: 275px;
+  text-align: center;
+  position: fixed;
+  z-index: 999;
+}
+
+[tooltip]:hover:before {
+  /* needed - do not touch */
+  opacity: 1;
+  
+  /* customizable */
+  background: white;
+  margin-top: -40px;
+}
+
+[tooltip^="Anger"]:hover:before {
+  margin-left: -165px;
+}
+
+[tooltip^="Liberal"]:hover:before {
+  margin-left: -150px;
+}
+
+[tooltip]:not([tooltip-graph]):hover:before {
+  margin-left: -35px;
+  margin-top: -50px !important;
+  width: 120px !important;
+}
+
+[tooltip]:not([tooltip-persistent]):before {
+    pointer-events: none;
+}
+
+
+/* Credit http://usabilitypost.com/2012/01/10/pressed-button-state-with-css3/ */
+.button-link {
+  padding: 10px 15px;
+  background: #4479BA;
+  color: #FFF;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border: solid 1px #20538D;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+}
+.button-link:hover {
+  background: #356094;
+  border: solid 1px #2A4E77;
+  text-decoration: none;
+}
+.button-link:active {
+  -webkit-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+  background: #2E5481;
+  border: solid 1px #203E5F;
+}
+

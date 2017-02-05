@@ -1,37 +1,85 @@
 <!doctype html>
-<!--
- This page is shown when the extension button is clicked, because the
- "browser_action" field in manifest.json contains the "default_popup" key with
- value "popup.html".
- -->
 <html>
   <head>
-    <title>Getting Started Extension's Popup</title>
-    <style>
-      body {
-        font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
-        font-size: 100%;
-      }
-      #status {
-        /* avoid an excessively wide status text */
-        white-space: pre;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        max-width: 400px;
-      }
-    </style>
-
-    <!--
-      - JavaScript and HTML must be in separate files: see our Content Security
-      - Policy documentation[1] for details and explanation.
-      -
-      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
-     -->
-    <script src="popup.js"></script>
+    <title>NewsComp</title>
+    <link rel="stylesheet" href="popup.css">
+    <script type="text/javascript" src="jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="popup.js"></script>
   </head>
   <body>
-    <div id="status"></div>
-    <img id="image-result" hidden>
+    <div id="container">
+      <div id="heading">
+        <h2>NewsComp: Same Story, Different Reports</h2>
+      </div>
+      <!-- <div class="loader"></div> -->
+      <div id="content">
+        <div id="curr" class="row">
+          <div class="news-container">
+            <img class="news-icon" src="img/curr.png">
+          </div>
+        </div>
+
+        <div id="breitbart" class="row">
+          <div class="news-container">
+            <img class="news-icon" src="img/breitbart.jpg">
+          </div>
+        </div>
+
+        <div id="cnn" class="row">
+          <div class="news-container">
+            <img class="news-icon" src="img/cnn.png">
+          </div>
+        </div>
+
+        <div id="foxnews" class="row">
+          <div class="news-container">
+            <img class="news-icon" src="img/foxnews.jpg">
+          </div>
+        </div>
+
+        <div id="nyt" class="row">
+          <div class="news-container">
+            <img class="news-icon" src="img/nyt.png">
+          </div>
+        </div>
+
+        <div id="politico" class="row">
+          <div class="news-container">
+            <img class="news-icon" src="img/politico.png">
+          </div>
+        </div>
+
+        <div id="wp" class="row">
+          <div class="news-container">
+            <img class="news-icon" src="img/wp.png">
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
 
+<!-- <div class="graph">
+            <div class="stacked-bar-graph" tooltip="Liberal: 35% Green: 25% Libertarian: 10% Conservative: 30%">
+              <span style="width:35%" class="bar-liberal"></span>
+              <span style="width:25%" class="bar-green"></span>
+              <span style="width:10%" class="bar-libertarian"></span>
+              <span style="width:30%" class="bar-conservative"></span>
+              <p>Political Ideology</p>
+            </div>
+          </div> -->
+
+<!-- <div class="graph">
+            <div class="stacked-bar-graph" tooltip="Anger: 20% Fear: 20% Joy: 20% Sadness: 20% Surprise: 20%">
+              <span style="width:20%" class="bar-anger"></span>
+              <span style="width:20%" class="bar-fear"></span>
+              <span style="width:20%" class="bar-joy"></span>
+              <span style="width:20%" class="bar-sadness"></span>
+              <span style="width:20%" class="bar-surprise"></span>
+              <p>Emotion</p>
+            </div>
+          </div> -->
+
+<!--  <div class="link-container">
+            <a tabindex="-1" target="_blank" href="https://www.google.com/" class="button-link">Related</a>
+          </div> -->
