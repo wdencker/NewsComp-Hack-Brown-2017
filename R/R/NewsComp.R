@@ -1,11 +1,3 @@
-library(RCurl)
-library(XML)
-library(curl)
-library(gsubfn)
-library(stringi)
-library(indicoio)
-
-
 getResponse <- function(url) {
   latkey <- "3a8836fbb3520a2b2aa3541d24a45806"
   h <- new_handle()
@@ -17,12 +9,8 @@ getResponse <- function(url) {
   response <- rawToChar(response$content)
   if(length(grep("message\":", response)) > 0) {
 	 return("unable to parse article")
-  } 
+  }
   response
-}
-
-getKeywords <- function(resp) {
-  strsplit(gsub("\"", "", substring(stri_unescape_unicode(strapplyc(resp, "keywords\":(.*)]", simplify = TRUE)),2)), ",")
 }
 
 getBody <- function(resp) {
@@ -33,16 +21,13 @@ analyzeBody <- function(body) {
   indico_key = '961434b69d19c04216d8c9064d954de2'
   pol <- political(body,api_key=indico_key)
   emo <- emotion(body, api_key=indico_key, threshold = .1, top_n = 3)
-  sent <- sentiment_hq(body, api_key=indico_key)
-  c(pol,emo,sent)
+  c(pol,emo)
 }
 
 analyzeURL <- function(url) {
-	  response <- getResponse(url)
-	  body <- getBody(response)
-    keywords <- getKeywords(response)
-    indico_scores <- analyzeBody(body)
-    c(body, keywords, indico_scores)
+	response <- getResponse(url)
+	getBody(response)
+
 }
 
 
@@ -72,26 +57,47 @@ magnitude <- function(v) {
 	sqrt(sum(v^2))
 }
 
-getBestMatch <- function(site, old.fvector, keywords) {
-  num.results <- 3
+getBestMatch <- function(site, old.fvector, keys) {
+  num.results <- 5
   new.url <- paste0("https://www.google.com/search?q=site:", site, "+", keys[[1]], "+", keys[[2]], "&tbm=nws&tbs=qdr:d&num=", num.results)
   html <- htmlParse(getURL(new.url),encoding="UTF-8")
   titles <- xpathSApply(html, "//*[@class='r']", xmlValue)
+  if (length(titles) == 0) {
+    Sys.sleep(1)
+    new.url <-  paste0("https://www.google.com/search?q=site:", site, "&tbm=nws&tbs=qdr:d&num=10")
+    html <- htmlParse(getURL(new.url),encoding="UTF-8")
+    titles <- xpathSApply(html, "//*[@class='r']", xmlValue)
+  }
   article.urls <- substring(xpathSApply(html, "//h3/a", xmlGetAttr, 'href'), 8)
-  best.article <- c(site, mostRelatedArticle(titles, article.urls, old.fvector))
+  best.article <- mostRelatedArticle(titles, article.urls, old.fvector)
 }
 
+createVector <- function(sites, i, matrix, current) {
+  if (sites[[i]] != current) {
+    c(site, matrix[[1:2, i]], analyzeBody(analyzeURL(matrix[[2, i]])))
+  } else {
+    c("", "", "", analyzeBody(body))
+  }
+}
 
 getResults <- function(url) {
-    data <- analyzeURL(url)
-    body <- data[[1]]
-    keywords <- data[[2]]
-    keys <- gsub(" ", "+", names(keywords(body, top_n = 3, api_key = '961434b69d19c04216d8c9064d954de2', version = 2)))
+   library(RCurl)
+   library(XML)
+   library(curl)
+   library(gsubfn)
+   library(stringi)
+   library(indicoio)
+    body <- analyzeURL(url)
+    keywords <- gsub(" ", "+", names(keywords(body, top_n = 10, api_key = '961434b69d19c04216d8c9064d954de2', version = 2)))
     simple.url <- gsub(".*(www.*com).*", "\\1", url)
   	sites <- c("www.nytimes.com", "www.cnn.com", "www.foxnews.com", "www.breitbart.com", "www.politico.com", "www.washingtonpost.com")
   	sites <- sites[!grepl(simple.url, sites)]
   	old.fvector <- sapply(text_features(body, api_key = '961434b69d19c04216d8c9064d954de2'), function(x) x)
-  	sapply(sites, function(x) getBestMatch(x, old.fvector, keywords, keys))
+  	matrix <- sapply(sites, function(x) getBestMatch(x, old.fvector, keywords))
+    sapply(1:6, function(x) createVector(sites, x, matrix, body, simple.url))
 }
+
+
+
 
 
