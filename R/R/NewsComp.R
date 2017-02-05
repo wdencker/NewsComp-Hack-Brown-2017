@@ -14,7 +14,7 @@ getResponse <- function(url) {
 }
 
 getBody <- function(resp) {
-  gsub("\n"," ",stri_unescape_unicode(substring(strapplyc(resp, "body\"😞.*)\"}", simplify = TRUE),2)))
+  gsub("\n"," ",stri_unescape_unicode(substring(strapplyc(resp, "body\":(.*)\"}", simplify = TRUE),2)))
 }
 
 analyzeBody <- function(body) {
@@ -68,7 +68,7 @@ getBestMatch <- function(site, old.fvector, keys) {
     html <- htmlParse(getURL(new.url),encoding="UTF-8")
     titles <- xpathSApply(html, "//*[@class='r']", xmlValue)
   }
-  article.urls <- substring(xpathSApply(html, "//h3/a", xmlGetAttr, 'href'), 😎
+  article.urls <- substring(xpathSApply(html, "//h3/a", xmlGetAttr, 'href'), 8)
   best.article <- mostRelatedArticle(titles, article.urls, old.fvector)
 }
 
