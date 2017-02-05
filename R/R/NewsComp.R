@@ -14,7 +14,7 @@ getResponse <- function(url) {
 }
 
 getBody <- function(resp) {
-  gsub("\n"," ",stri_unescape_unicode(substring(strapplyc(resp, "body\":(.*)\"}", simplify = TRUE),2)))
+  gsub("\n"," ",stri_unescape_unicode(substring(strapplyc(resp, "body\"😞.*)\"}", simplify = TRUE),2)))
 }
 
 analyzeBody <- function(body) {
@@ -48,7 +48,7 @@ mostRelatedArticle <- function(titles, new.urls, old.fvector) {
   best.score.index <- order(scores, decreasing  = T)[[1]]
   url <-new.urls[[best.score.index]]
   title <- titles[[best.score.index]]
-  c(url, title)
+  c(strapplyc(url, "([^&]*).*")[[1]], title)
 }
 
 
@@ -59,7 +59,7 @@ magnitude <- function(v) {
 getBestMatch <- function(site, old.fvector, keys) {
   Sys.sleep(abs(1 + rnorm(1)))
   num.results <- 5
-  new.url <- paste0("https://www.google.com/search?q=site:", site, "+", keys[[1]], "+", keys[[2]], "&tbm=nws&tbs=qdr:d&num=", num.results)
+  new.url <- paste0("https://www.google.com/search?q=site:", site, "|", keys[[1]], "|", keys[[2]], "&tbm=nws&tbs=qdr:d&num=", num.results)
   html <- htmlParse(getURL(new.url),encoding="UTF-8")
   titles <- xpathSApply(html, "//*[@class='r']", xmlValue)
   if (length(titles) == 0) {
@@ -68,13 +68,12 @@ getBestMatch <- function(site, old.fvector, keys) {
     html <- htmlParse(getURL(new.url),encoding="UTF-8")
     titles <- xpathSApply(html, "//*[@class='r']", xmlValue)
   }
-  article.urls <- substring(xpathSApply(html, "//h3/a", xmlGetAttr, 'href'), 8)
+  article.urls <- substring(xpathSApply(html, "//h3/a", xmlGetAttr, 'href'), 😎
   best.article <- mostRelatedArticle(titles, article.urls, old.fvector)
 }
 
 
-createVector <- function(sites, i, matrix, body) {
-    print(matrix[1,i])
+createVector <- function(sites, i, matrix) {
     c(sites[[i]], matrix[1:2, i], analyzeBody(analyzeURL(matrix[1, i])))
 }
 
@@ -86,12 +85,13 @@ getResults <- function(url) {
    library(stringi)
    library(indicoio)
     body <- analyzeURL(url)
-    keywords <- names(keywords(body, top_n = 10, api_key = '961434b69d19c04216d8c9064d954de2', version = 2))
+    keywords <- c(names(keywords(body, top_n = 10, api_key = '961434b69d19c04216d8c9064d954de2', version = 2)), "the", "the") #hacky way to avoid keys[[1]] or [[2]] out of bounds
     keywords <- grep("[[:alnum:]][[:alnum:]+]", keywords, value = T)
+    keywords <- gsub(" ", "|", keywords)
     simple.url <- gsub(".*(www.*com).*", "\\1", url)
   	sites <- c("www.nytimes.com", "www.cnn.com", "www.foxnews.com", "www.breitbart.com", "www.politico.com", "www.washingtonpost.com")
   	old.fvector <- sapply(text_features(body, api_key = '961434b69d19c04216d8c9064d954de2'), function(x) x)
   	matrix <- sapply(sites, function(x) getBestMatch(x, old.fvector, keywords))
-    v <- c(c("", "", "", analyzeBody(body)), sapply(1:6, function(x) createVector(sites, x, matrix, body)))
+    v <- c(c("", "", "", analyzeBody(body)), sapply(1:6, function(x) createVector(sites, x, matrix)))
     unlist(v, recursive = T, use.names = F)
 }
