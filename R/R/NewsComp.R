@@ -74,6 +74,7 @@ getBestMatch <- function(site, old.fvector, keys) {
 
 
 createVector <- function(sites, i, matrix, body) {
+    print(matrix[1,i])
     c(sites[[i]], matrix[1:2, i], analyzeBody(analyzeURL(matrix[1, i])))
 }
 
