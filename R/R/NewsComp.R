@@ -21,7 +21,7 @@ analyzeBody <- function(body) {
   indico_key = '961434b69d19c04216d8c9064d954de2'
   pol <- political(body,api_key=indico_key)
   emo <- emotion(body, api_key=indico_key)
-  c(pol,emo)
+  100*c(pol,emo)
 }
 
 analyzeURL <- function(url) {
@@ -58,13 +58,13 @@ magnitude <- function(v) {
 }
 
 getBestMatch <- function(site, old.fvector, keys) {
-  Sys.sleep(abs(1 + rnorm(1)))
+  Sys.sleep(abs(2 + 3*rnorm(1)))
   num.results <- 5
   new.url <- paste0("https://www.google.com/search?q=site:", site, "+", keys[[1]], "+", keys[[2]], "&tbm=nws&tbs=qdr:d&num=", num.results)
   html <- htmlParse(getURL(new.url),encoding="UTF-8")
   titles <- xpathSApply(html, "//*[@class='r']", xmlValue)
   if (length(titles) == 0) {
-    Sys.sleep(abs(1 + 1*rnorm(1)))
+    Sys.sleep(abs(2 + 3*rnorm(1)))
     new.url <-  paste0("https://www.google.com/search?q=site:", site, "&tbm=nws&tbs=qdr:d&num=10")
     html <- htmlParse(getURL(new.url),encoding="UTF-8")
     titles <- xpathSApply(html, "//*[@class='r']", xmlValue)
