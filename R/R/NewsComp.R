@@ -99,13 +99,13 @@ getResults <- function(url) {
    library(indicoio)
     body <- analyzeURL(url)
     keywords <- names(keywords(body, top_n = 10, api_key = '961434b69d19c04216d8c9064d954de2', version = 2))
+    keywords <- grep("[[:alnum:]][[:alnum:]+]", keywords, value = T)
     simple.url <- gsub(".*(www.*com).*", "\\1", url)
-    sites <- c("www.nytimes.com", "www.cnn.com", "www.foxnews.com", "www.breitbart.com", "www.politico.com", "www.washingtonpost.com")
-    sites <- sites[!grepl(simple.url, sites)]
-    old.fvector <- sapply(text_features(body, api_key = '961434b69d19c04216d8c9064d954de2'), function(x) x)
-    matrix <- sapply(sites, function(x) getBestMatch(x, old.fvector, keywords))
-    v <- c(c("", "", "", analyzeBody(body)), sapply(1:5, function(x) createVector(sites, x, matrix, body, simple.url)))    
-    unlist(v, recursive = TRUE, use.names = F)
+  	sites <- c("www.nytimes.com", "www.cnn.com", "www.foxnews.com", "www.breitbart.com", "www.politico.com", "www.washingtonpost.com")
+  	old.fvector <- sapply(text_features(body, api_key = '961434b69d19c04216d8c9064d954de2'), function(x) x)
+  	matrix <- sapply(sites, function(x) getBestMatch(x, old.fvector, keywords))
+   v <- c(c("", "", "", analyzeBody(body)), sapply(1:6, function(x) createVector(sites, x, matrix, body)))
+   unlist(v, recursive = T)
 }
 
 
