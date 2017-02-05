@@ -24,10 +24,9 @@ analyzeBody <- function(body) {
   c(pol,emo)
 }
 
-analyzeURL <- function(url) { 
+analyzeURL <- function(url) {
 	response <- getResponse(url)
 	getBody(response)
-
 }
 
 
@@ -58,13 +57,13 @@ magnitude <- function(v) {
 }
 
 getBestMatch <- function(site, old.fvector, keys) {
-  Sys.sleep(abs(2 + 3*rnorm(1)))
+  Sys.sleep(abs(1 + rnorm(1)))
   num.results <- 5
   new.url <- paste0("https://www.google.com/search?q=site:", site, "+", keys[[1]], "+", keys[[2]], "&tbm=nws&tbs=qdr:d&num=", num.results)
   html <- htmlParse(getURL(new.url),encoding="UTF-8")
   titles <- xpathSApply(html, "//*[@class='r']", xmlValue)
   if (length(titles) == 0) {
-    Sys.sleep(abs(2 + 3*rnorm(1)))
+    Sys.sleep(abs(1 + 1*rnorm(1)))
     new.url <-  paste0("https://www.google.com/search?q=site:", site, "&tbm=nws&tbs=qdr:d&num=10")
     html <- htmlParse(getURL(new.url),encoding="UTF-8")
     titles <- xpathSApply(html, "//*[@class='r']", xmlValue)
@@ -73,7 +72,8 @@ getBestMatch <- function(site, old.fvector, keys) {
   best.article <- mostRelatedArticle(titles, article.urls, old.fvector)
 }
 
-createVector <- function(sites, i, matrix, body, current) {
+
+createVector <- function(sites, i, matrix, body) {
     c(sites[[i]], matrix[1:2, i], analyzeBody(analyzeURL(matrix[1, i])))
 }
 
@@ -83,7 +83,6 @@ getResults <- function(url) {
    library(curl)
    library(gsubfn)
    library(stringi)
-  # library(tm.plugin.webmining)
    library(indicoio)
     body <- analyzeURL(url)
     keywords <- names(keywords(body, top_n = 10, api_key = '961434b69d19c04216d8c9064d954de2', version = 2))
@@ -92,6 +91,6 @@ getResults <- function(url) {
   	sites <- c("www.nytimes.com", "www.cnn.com", "www.foxnews.com", "www.breitbart.com", "www.politico.com", "www.washingtonpost.com")
   	old.fvector <- sapply(text_features(body, api_key = '961434b69d19c04216d8c9064d954de2'), function(x) x)
   	matrix <- sapply(sites, function(x) getBestMatch(x, old.fvector, keywords))
-   v <- c(c("", "", "", analyzeBody(body)), sapply(1:6, function(x) createVector(sites, x, matrix, body)))
-   unlist(v, recursive = T, use.names = F)
+    v <- c(c("", "", "", analyzeBody(body)), sapply(1:6, function(x) createVector(sites, x, matrix, body)))
+    unlist(v, recursive = T, use.names = F)
 }
