@@ -96,6 +96,7 @@ getResults <- function(url) {
    library(curl)
    library(gsubfn)
    library(stringi)
+   library(tm.plugin.webmining)
    library(indicoio)
     body <- analyzeURL(url)
     keywords <- names(keywords(body, top_n = 10, api_key = '961434b69d19c04216d8c9064d954de2', version = 2))
