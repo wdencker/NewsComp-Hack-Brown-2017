@@ -18,7 +18,7 @@ getBody <- function(resp) {
 }
 
 analyzeBody <- function(body) {
-  indico_key = '961434b69d19c04216d8c9064d954de2'
+  indico_key = 'a42a5bed73f3d4309091a2b68d395f7f'
   pol <- political(body,api_key=indico_key)
   emo <- emotion(body, api_key=indico_key)
   c(pol,emo)
