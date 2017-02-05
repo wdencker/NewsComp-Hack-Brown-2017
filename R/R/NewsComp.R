@@ -58,32 +58,19 @@ magnitude <- function(v) {
 }
 
 getBestMatch <- function(site, old.fvector, keys) {
-  Sys.sleep(4)
-  content <- GoogleNewsSource( params = list(hl = "en", q = paste0("site:", site, " ", keys[[1]], " ", keys[[2]]), ie = "utf-8", num = 5, output = "rss"))$content
-  links <- sapply(content, function(x) as(x[2]$link, "character"))
-  for (i in 1:5) {
-      links[i] <- strapplyc(links[i], ".*url=([^<]*).*")[[1]]
-  }
-  titles <- sapply(content, function(x) as(x[1]$title, "character"))
-  for (i in 1:5) {
-      titles[i] <- strapplyc(titles[i], "<title>(.*)</title>")[[1]]
-  }
+  Sys.sleep(abs(1 + rnorm(1)))
+  num.results <- 5
+  new.url <- paste0("https://www.google.com/search?q=site:", site, "+", keys[[1]], "+", keys[[2]], "&tbm=nws&tbs=qdr:d&num=", num.results)
+  html <- htmlParse(getURL(new.url),encoding="UTF-8")
+  titles <- xpathSApply(html, "//*[@class='r']", xmlValue)
   if (length(titles) == 0) {
-      Sys.sleep(4)
-      content <- GoogleNewsSource( params = list(hl = "en", q = paste0("site:", site), ie = "utf-8", num = 5, output = "rss"))$content
-      links <- sapply(content, function(x) as(x[2]$link, "character"))
-      for (i in 1:5) {
-        links[i] <- strapplyc(links[i], ".*url=([^<]*).*")[[1]]
-      }
-      titles <- sapply(content, function(x) as(x[1]$title, "character"))
-      for (i in 1:5) {
-        titles[i] <- strapplyc(titles[i], "<title>(.*)</title>")[[1]]
-      }
+    Sys.sleep(abs(1 + 1*rnorm(1)))
+    new.url <-  paste0("https://www.google.com/search?q=site:", site, "&tbm=nws&tbs=qdr:d&num=10")
+    html <- htmlParse(getURL(new.url),encoding="UTF-8")
+    titles <- xpathSApply(html, "//*[@class='r']", xmlValue)
   }
-  print(titles)
-  print(links)
-  print(keys)
-  best.article <- mostRelatedArticle(titles, links, old.fvector)
+  article.urls <- substring(xpathSApply(html, "//h3/a", xmlGetAttr, 'href'), 8)
+  best.article <- mostRelatedArticle(titles, article.urls, old.fvector)
 }
 
 createVector <- function(sites, i, matrix, body, current) {
