@@ -72,7 +72,7 @@ getBestMatch <- function(site, old.fvector, keys) {
   best.article <- mostRelatedArticle(titles, article.urls, old.fvector)
 }
 
-createVector <- function(sites, i, matrix, current) {
+createVector <- function(sites, i, matrix, body, current) {
   if (sites[[i]] != current) {
     c(site, matrix[[1:2, i]], analyzeBody(analyzeURL(matrix[[2, i]])))
   } else {
