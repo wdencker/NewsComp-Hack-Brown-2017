@@ -58,7 +58,7 @@ magnitude <- function(v) {
 }
 
 getBestMatch <- function(site, old.fvector, keys) {
-  num.results <- 5
+  num.results <- 3
   new.url <- paste0("https://www.google.com/search?q=site:", site, "+", keys[[1]], "+", keys[[2]], "&tbm=nws&tbs=qdr:d&num=", num.results)
   html <- htmlParse(getURL(new.url),encoding="UTF-8")
   titles <- xpathSApply(html, "//*[@class='r']", xmlValue)
