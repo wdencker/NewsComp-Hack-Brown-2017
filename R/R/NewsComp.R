@@ -21,7 +21,7 @@ analyzeBody <- function(body) {
   indico_key = '961434b69d19c04216d8c9064d954de2'
   pol <- political(body,api_key=indico_key)
   emo <- emotion(body, api_key=indico_key)
-  100*c(pol,emo)
+  c(pol,emo)
 }
 
 analyzeURL <- function(url) {
