@@ -24,7 +24,7 @@ analyzeBody <- function(body) {
   c(pol,emo)
 }
 
-analyzeURL <- function(url) {
+analyzeURL <- function(url) { 
 	response <- getResponse(url)
 	getBody(response)
 
@@ -74,7 +74,7 @@ getBestMatch <- function(site, old.fvector, keys) {
 }
 
 createVector <- function(sites, i, matrix, body, current) {
-    c(sites[[i]], matrix[1:2, i], analyzeBody(analyzeURL(matrix[2, i])))
+    c(sites[[i]], matrix[1:2, i], analyzeBody(analyzeURL(matrix[1, i])))
 }
 
 getResults <- function(url) {
