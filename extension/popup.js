@@ -4,44 +4,45 @@
 chrome.tabs.getSelected(null, function(tab) {
     var url = tab.url;
 
-    ocpu.seturl("http://104.196.2.199/ocpu/library/NewsComp/R");
+    ocpu.seturl("http://104.196.223.110/ocpu/library/NewsComp/R");
     
     var req = ocpu.call("getResults", {
         "url" : url
     }, function(session){
         session.getObject(function(data){
         	// Order: libertarian green liberal conservative anger joy fear sadness surprise
-        	$("#curr .graph.first").html(createPoliticalIdeologyGraph(data[4], data[5],data[6],data[7]));
-        	$("#curr .graph.second").html(createEmotionGraph(data[8], data[9],data[10],data[11]), data[12]);
+        	console.log(data);
+        	$("#curr .graph.first").html(createPoliticalIdeologyGraph(data[3], data[4],data[5],data[6]));
+        	$("#curr .graph.second").html(createEmotionGraph(data[7], data[8],data[9],data[10], data[11]));
 
-        	$("#nyt .link-container").replaceWith(createRelatedLink(data[14], data[15]));
-        	$("#nyt .graph.first").html(createPoliticalIdeologyGraph(data[16], data[17],data[18],data[19]));
-        	$("#nyt .graph.second").html(createEmotionGraph(data[20], data[21],data[22],data[23]), data[24]);
+        	$("#nyt .link-container").replaceWith(createRelatedLink(data[13], data[14]));
+        	$("#nyt .graph.first").html(createPoliticalIdeologyGraph(data[15], data[16],data[17],data[18]));
+        	$("#nyt .graph.second").html(createEmotionGraph(data[19], data[20],data[21], data[22], data[23]));
 
-        	$("#cnn .link-container").replaceWith(createRelatedLink(data[26], data[27]));
-        	$("#cnn .graph.first").html(createPoliticalIdeologyGraph(data[28], data[29],data[30],data[31]));
-        	$("#cnn .graph.second").html(createEmotionGraph(data[32], data[33],data[34],data[35]), data[36]);
+        	$("#cnn .link-container").replaceWith(createRelatedLink(data[25], data[26]));
+        	$("#cnn .graph.first").html(createPoliticalIdeologyGraph(data[27], data[28],data[29],data[30]));
+        	$("#cnn .graph.second").html(createEmotionGraph(data[31], data[32],data[33], data[34], data[35]));
 
-        	$("#foxnews .link-container").replaceWith(createRelatedLink(data[38], data[39]));
-        	$("#foxnews .graph.first").html(createPoliticalIdeologyGraph(data[40], data[41],data[42],data[43]));
-        	$("#foxnews .graph.second").html(createEmotionGraph(data[44], data[45],data[46],data[47]), data[48]);
+        	$("#foxnews .link-container").replaceWith(createRelatedLink(data[37], data[38]));
+        	$("#foxnews .graph.first").html(createPoliticalIdeologyGraph(data[39], data[40],data[41],data[42]));
+        	$("#foxnews .graph.second").html(createEmotionGraph(data[43], data[44],data[45], data[46], data[47]));
 
-        	$("#breitbart .link-container").replaceWith(createRelatedLink(data[50], data[51]));
-        	$("#breitbart .graph.first").html(createPoliticalIdeologyGraph(data[52], data[53],data[54],data[55]));
-        	$("#breitbart .graph.second").html(createEmotionGraph(data[56], data[57],data[58],data[59]), data[60]);
+        	$("#breitbart .link-container").replaceWith(createRelatedLink(data[49], data[50]));
+        	$("#breitbart .graph.first").html(createPoliticalIdeologyGraph(data[51], data[52],data[53],data[54]));
+        	$("#breitbart .graph.second").html(createEmotionGraph(data[55], data[56],data[57], data[58], data[59]));
 
-        	$("#politico .link-container").replaceWith(createRelatedLink(data[62], data[63]));
-        	$("#politico .graph.first").html(createPoliticalIdeologyGraph(data[64], data[65],data[66],data[67]));
-        	$("#politico .graph.second").html(createEmotionGraph(data[68], data[69],data[70],data[71]), data[72]);
+        	$("#politico .link-container").replaceWith(createRelatedLink(data[61], data[62]));
+        	$("#politico .graph.first").html(createPoliticalIdeologyGraph(data[63], data[64],data[65],data[66]));
+        	$("#politico .graph.second").html(createEmotionGraph(data[67], data[68],data[69],data[70], data[71]));
 
-        	$("#wp .link-container").replaceWith(createRelatedLink(data[74], data[75]));
-        	$("#wp .graph.first").html(createPoliticalIdeologyGraph(data[76], data[77],data[78],data[79]));
-        	$("#wp .graph.second").html(createEmotionGraph(data[80], data[81],data[82],data[83]), data[84]);
+        	$("#wp .link-container").replaceWith(createRelatedLink(data[73], data[74]));
+        	$("#wp .graph.first").html(createPoliticalIdeologyGraph(data[75], data[76],data[77],data[78]));
+        	$("#wp .graph.second").html(createEmotionGraph(data[79], data[80],data[81],data[82], data[83]));
         });
     });
 
     req.fail(function(){
-    	alert("Server error: " + req.responseText);
+    	console.log("Server error: " + req.responseText);
     });
 
     // $("#breitbart .link-container").replaceWith(createRelatedLink("#", "Welcome to the Jungle"));
@@ -79,10 +80,10 @@ function createRelatedLink(link, title) {
 }
 
 function createPoliticalIdeologyGraph(libertarian, green, liberal, conservative) {
-	liberal = Math.round(liberal);
-	green = Math.round(green);
-	libertarian = Math.round(libertarian);
-	conservative = Math.round(conservative);
+	liberal = Math.round(liberal * 100);
+	green = Math.round(green * 100);
+	libertarian = Math.round(libertarian * 100);
+	conservative = 100 - liberal - green - libertarian;
 	var html = '<div class="stacked-bar-graph" tooltip="Liberal: ';
 	html += String(liberal);
 	html += "% Green: ";
@@ -105,11 +106,11 @@ function createPoliticalIdeologyGraph(libertarian, green, liberal, conservative)
 }
 
 function createEmotionGraph(anger, joy, fear, sadness, surprise) {
-	anger = Math.round(anger);
-	fear = Math.round(fear);
-	joy = Math.round(joy);
-	sadness = Math.round(sadness);
-	surprise = Math.round(surprise);
+	anger = Math.round(anger * 100);
+	fear = Math.round(fear * 100);
+	joy = Math.round(joy * 100);
+	sadness = Math.round(sadness * 100);
+	surprise = 100 - anger - fear - joy - sadness;
 	var html = '<div class="stacked-bar-graph" tooltip="Anger: ';
 	html += String(anger);
 	html += "% Fear: ";
