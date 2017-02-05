@@ -94,8 +94,7 @@ getResults <- function(url) {
   	sites <- sites[!grepl(simple.url, sites)]
   	old.fvector <- sapply(text_features(body, api_key = '961434b69d19c04216d8c9064d954de2'), function(x) x)
   	matrix <- sapply(sites, function(x) getBestMatch(x, old.fvector, keywords))
-  #  sapply(1:6, function(x) createVector(sites, x, matrix, body, simple.url))
-	matrix
+   sapply(1:6, function(x) createVector(sites, x, matrix, body, simple.url))
 }
 
 
