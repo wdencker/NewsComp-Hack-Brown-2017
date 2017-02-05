@@ -73,11 +73,7 @@ getBestMatch <- function(site, old.fvector, keys) {
 }
 
 createVector <- function(sites, i, matrix, body, current) {
-  if (sites[[i]] != current) {
     c(sites[[i]], matrix[1:2, i], analyzeBody(analyzeURL(matrix[2, i])))
-  } else {
-    c("", "", "", analyzeBody(body))
-  }
 }
 
 getResults <- function(url) {
@@ -94,8 +90,7 @@ getResults <- function(url) {
     sites <- sites[!grepl(simple.url, sites)]
     old.fvector <- sapply(text_features(body, api_key = '961434b69d19c04216d8c9064d954de2'), function(x) x)
     matrix <- sapply(sites, function(x) getBestMatch(x, old.fvector, keywords))
-    sites <- c("www.nytimes.com", "www.cnn.com", "www.foxnews.com", "www.breitbart.com", "www.politico.com", "www.washingtonpost.com")
-    v <- sapply(1:6, function(x) createVector(sites, x, matrix, body, simple.url))
+    v <- c(c("", "", "", analyzeBody(body)), sapply(1:5, function(x) createVector(sites, x, matrix, body, simple.url)))
     unlist(v, recursive = TRUE, use.names = TRUE)
 }
 
